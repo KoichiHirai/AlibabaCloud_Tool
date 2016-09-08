@@ -1,9 +1,10 @@
 <?php 
+$ini = parse_ini_file("config.ini");
 date_default_timezone_set('Asia/Tokyo');
 include_once '/home/hirai/aliyun-openapi-php-sdk/aliyun-php-sdk-core/Config.php'; 
 use Ecs\Request\V20140526 as Ecs; 
 
-$iClientProfile = DefaultProfile::getProfile("cn-hongkong",$_SERVER['ALIYUN_KEY'],$_SERVER['ALIYUN_SECRET']); 
+$iClientProfile = DefaultProfile::getProfile("cn-hongkong",$_SERVER['ALIYUN_KEY'],$_SERVER['ALIYUN_SECRET']);
 $client = new DefaultAcsClient($iClientProfile); 
 
 //getting the number of instances before creating an instance
@@ -27,93 +28,26 @@ try{
 
 $request = new Ecs\CreateInstanceRequest();
                                                                                                                        
-$imageId = "ubuntu1204_32_40G_cloudinit_20160427.raw";
+$imageId = $ini["ImageID"];
 //$imageId = "win2012_64_datactr_r2_cn_40G_alibase_20160622.vhd";
 $request->setImageId($imageId);
-$instanceType = "ecs.n1.tiny";
+$regionId = $ini["RegionID"];
+$request->setRegionId($regionId);
+$zoneId = ["ZoneID"];
+$request->setZoneId($zoneId);
+$instanceType = $ini["InstanceType"];
 $request->setInstanceType($instanceType);
-$name = "created-by-php";
+$name = $ini["Name"];
 $request->setInstanceName($name);
-$securityId = "sg-62txsl3lo";
+$securityId = $ini["SecurityID"];
 $request->setSecurityGroupId($securityId);
-$diskCategory = "cloud_efficiency";
+$diskCategory = $ini["DiskCategory"];
 $request->setSystemDiskCategory($diskCategory);
-$opt = "optimized";
-$request->setIoOptimized($opt);
-                                                                                                                       
+$opt = $ini["IoOptimized"];
+$request->setIoOptimized($opt); 
 $request->setMethod("GET");
-
-////specifying the type of memory and the number of the core
-//$types = explode(".", $instanceType);
-//
-//if($types[1] == "n1"){
-//	if($types[2] == "tiny"){
-//		$memory = 1024;
-//		$core = 1;
-//	}
-//	else if($types[2] == "small"){
-//		$memory = 2048;
-//		$core = 1;
-//	}
-//	else if($types[2] == "medium"){
-//		$memory = 4096;
-//		$core = 2;
-//	}
-//	else if($types[2] == "large"){
-//		$memory = 8192;
-//		$core = 2;
-//	}
-//}
-//
-//else if($types[1]== "n2"){
-//	if($types[2] == "small"){
-//		$memory = 4096;
-//		$core = 1;
-//	}
-//	else if($types[2] == "medium"){
-//		$memory = 8192;
-//		$core = 2;
-//	}
-//	else if($types[2] == "large"){
-//		$memory = 16384;
-//		$core = 4;
-//	}
-//}
-//
-//else if($types[1] == "e3"){
-//	if(types[2] == "small"){
-//		$memory = 8192;
-//		$core = 1;
-//	}
-//	else if(types[2] == "medium"){
-//		$memory = 16384;
-//                $core = 2;
-//	}
-//}
-//
-//else if($types[1] == "sn1"){
-//	if($types[2] == "medium"){
-//		$memory =4096 ;
-//                $core = 2;
-//	}
-//	else if($types[2] == "large"){
-//		$memory = 8192;
-//                $core = 4;
-//	}
-//}
-//
-//else if($types[1] == "sn2"){
-//	if($types[2] == "medium"){
-//		$memory = 8192;
-//                $core = 2;
-//	}
-//	if($types[2] == "large"){
-//		$memory = 16384;
-//                $core = 4;
-//	}
-//}	
-                                                                                                                       
-                                                                                                                      
+ 
+ 
 $response = $client->getAcsResponse($request);
 //$response = $client->doAction($request); 
 }catch(Exception $e){

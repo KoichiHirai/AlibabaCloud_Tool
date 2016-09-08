@@ -5,6 +5,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.js"></script>
 </head>
 <body>
+<?php $ini = parse_ini_file("config.ini"); ?>
+
 <h1>The state of each instance</h1>
 
 <h2>The informaiton of the instance</h2>
@@ -211,7 +213,7 @@ text-align: center;
 <script>
 
 //折れ線グラフ2
-var number = 100;
+var number = <?php echo json_encode($ini["number"]); ?>;
 
 var ctx = document.getElementById("canvas");
 
